@@ -2,7 +2,7 @@
 
 """Data Modeling For Statistik Perbankan indonesia
 berlaku untuk Model :
-Lap.L.R_KBMI1.6.-1.10.
+Keg.usaha KBMI 1.1.-1.5.
 """
 
 # Init module 
@@ -17,9 +17,9 @@ import re
 
 # File Loader
 df = pd.read_excel('STATISTIK PERBANKAN INDONESIA - AGUSTUS 2023.xlsx',
-                    sheet_name = 'Lap.L.R_KBMI1.6.-1.10.', 
+                    sheet_name = 'Keg.usaha KBMI 1.1.-1.5.', 
                     dtype=object, header=None)
-df.insert(0, 'Sheet_Name', 'Lap.L.R_KBMI1.6.-1.10.')
+df.insert(0, 'Sheet_Name', 'Keg.usaha KBMI 1.1.-1.5.')
 df.insert(0, 'File_Name', 'STATISTIK PERBANKAN INDONESIA - AGUSTUS 2023.xlsx')
 
 # Tabel Name
@@ -126,11 +126,11 @@ df_1 = df_1[filt_ls_coll]
 # Level Cleanup Operations
 lvl_coll = [coll for coll in df_1.columns.to_list() if coll[:5]=='level']
 
-# Level Remove A. or a.
+# Level Remove A. or a. -
 df_1[lvl_coll] = df_1[lvl_coll].replace(r'^[a-zA-Z]\.$',np.nan, regex=True)
 df_1[lvl_coll] = df_1[lvl_coll].replace(r'^[0-9]\.',np.nan, regex=True)
+df_1[lvl_coll] = df_1[lvl_coll].replace(r'^-$',np.nan, regex=True)
 df_1[lvl_coll] = df_1[lvl_coll].replace(headers_words,np.nan, regex=True)
-
 
 
 #%%
@@ -151,14 +151,29 @@ lvl_coll = [coll for coll in df_1.columns.to_list() if coll[:5]=='level']
 
 
 #%%
-# Chek last level column if there is Indent or dash that indicate hierarchy
-if any(df_1[lvl_coll[-1]].str.match(r'^-.+', case=False)):
+# Check last level column if there is dash and space that indicate hierarchy
+if any(df_1[lvl_coll[-1]].str.match(r'^ .+|^-.+', case=False)):
     new_col_nm = f'level_{str(int(lvl_coll[-1][-1]) + 1)}'
     # Fill New Level with Value
-    df_1[new_col_nm] = np.where(df_1[lvl_coll[-1]].str.match(r'^-.+', case=False),
+    df_1[new_col_nm] = np.where(df_1[lvl_coll[-1]].str.match(r'^ .+|^-.+', case=False),
                             df_1[lvl_coll[-1]],
                             np.nan)
-    df_1[lvl_coll[-1]] = df_1[lvl_coll[-1]].replace(r'^-.+',np.nan, regex=True)
+    df_1[lvl_coll[-1]] = df_1[lvl_coll[-1]].replace(r'^ .+|^-.+',np.nan, regex=True)
+
+# refresh column level selection
+lvl_coll = [coll for coll in df_1.columns.to_list() if coll[:5]=='level']
+
+# Check last level column if there is dash that indicate hierarchy
+if any(df_1[lvl_coll[-1]].str.match(r'^ .+', case=False)):
+    new_col_nm = f'level_{str(int(lvl_coll[-1][-1]) + 1)}'
+    # Fill New Level with Value
+    df_1[new_col_nm] = np.where(df_1[lvl_coll[-1]].str.match(r'^ .+', case=False),
+                            df_1[lvl_coll[-1]],
+                            np.nan)
+    df_1[lvl_coll[-1]] = df_1[lvl_coll[-1]].replace(r'^ .+',np.nan, regex=True)
+
+
+
 
 #%%
 
@@ -174,7 +189,9 @@ df_1[lvl_coll] = df_1[lvl_coll].ffill()
 
 # Remove Column that has no Numbers
 df_all = df_1.loc[df_1['numcheck']==True]
-
+df_all = df_all.dropna(axis=1, how='all')
+# refresh column level selection
+lvl_coll = [coll for coll in df_all.columns.to_list() if coll[:5]=='level']
 
 #%%
 # Parent Child column operations
@@ -186,7 +203,13 @@ df_all['lst_level'] = df_all['lst_level'].apply(pd.unique)
 # check if there is more than 2 then remove element starting from left side
 
 df_all['lst_level'] = df_all['lst_level'].apply(lambda x: x[-2:])
-df_all[['parent', 'child']] = pd.DataFrame(df_all['lst_level'].tolist(), index= df_all.index)
+
+# sense if having or no child
+if max(df_all['lst_level'].apply(len)) == 1:
+    df_all['parent'] = pd.DataFrame(df_all['lst_level'].tolist(), index= df_all.index)
+    df_all['child'] = np.nan
+else:
+    df_all[['parent', 'child']] = pd.DataFrame(df_all['lst_level'].tolist(), index= df_all.index)
 
 #%%
 # Select Column for transpose ops

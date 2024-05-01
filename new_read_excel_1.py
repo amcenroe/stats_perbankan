@@ -2,7 +2,7 @@
 
 """Data Modeling For Statistik Perbankan indonesia
 berlaku untuk Model :
-Lap.L.R_KBMI1.6.-1.10.
+Aset BU per KBMI_1.21.
 """
 
 # Init module 
@@ -17,9 +17,9 @@ import re
 
 # File Loader
 df = pd.read_excel('STATISTIK PERBANKAN INDONESIA - AGUSTUS 2023.xlsx',
-                    sheet_name = 'Lap.L.R_KBMI1.6.-1.10.', 
+                    sheet_name = 'Aset BU per KBMI_1.21.', 
                     dtype=object, header=None)
-df.insert(0, 'Sheet_Name', 'Lap.L.R_KBMI1.6.-1.10.')
+df.insert(0, 'Sheet_Name', 'Aset BU per KBMI_1.21.')
 df.insert(0, 'File_Name', 'STATISTIK PERBANKAN INDONESIA - AGUSTUS 2023.xlsx')
 
 # Tabel Name
@@ -126,9 +126,10 @@ df_1 = df_1[filt_ls_coll]
 # Level Cleanup Operations
 lvl_coll = [coll for coll in df_1.columns.to_list() if coll[:5]=='level']
 
-# Level Remove A. or a.
+# Level Remove A. or a. -
 df_1[lvl_coll] = df_1[lvl_coll].replace(r'^[a-zA-Z]\.$',np.nan, regex=True)
 df_1[lvl_coll] = df_1[lvl_coll].replace(r'^[0-9]\.',np.nan, regex=True)
+df_1[lvl_coll] = df_1[lvl_coll].replace(r'^-$',np.nan, regex=True)
 df_1[lvl_coll] = df_1[lvl_coll].replace(headers_words,np.nan, regex=True)
 
 
@@ -174,7 +175,9 @@ df_1[lvl_coll] = df_1[lvl_coll].ffill()
 
 # Remove Column that has no Numbers
 df_all = df_1.loc[df_1['numcheck']==True]
-
+df_all = df_all.dropna(axis=1, how='all')
+# refresh column level selection
+lvl_coll = [coll for coll in df_all.columns.to_list() if coll[:5]=='level']
 
 #%%
 # Parent Child column operations
@@ -186,7 +189,13 @@ df_all['lst_level'] = df_all['lst_level'].apply(pd.unique)
 # check if there is more than 2 then remove element starting from left side
 
 df_all['lst_level'] = df_all['lst_level'].apply(lambda x: x[-2:])
-df_all[['parent', 'child']] = pd.DataFrame(df_all['lst_level'].tolist(), index= df_all.index)
+
+# sense if having or no child
+if max(df_all['lst_level'].apply(len)) == 1:
+    df_all['parent'] = pd.DataFrame(df_all['lst_level'].tolist(), index= df_all.index)
+    df_all['child'] = np.nan
+else:
+    df_all[['parent', 'child']] = pd.DataFrame(df_all['lst_level'].tolist(), index= df_all.index)
 
 #%%
 # Select Column for transpose ops
