@@ -7,7 +7,7 @@ https://www.ojk.go.id/id/kanal/perbankan/data-dan-statistik/statistik-perbankan-
 Sheet yang di transformasikan :
 1. Aset BU per KBMI_1.21. --> Done
 2. Keg.usaha KBMI 1.1.-1.5. -> Done
-3. Kinerja_KBMI 1.16.-1.20. 
+3. Kinerja_KBMI 1.16.-1.20. -> Done
 4. Kinerja_1.16.a.-1.20.a.
 5. Lap.L.R_KBMI1.6.-1.10. --> Done
 6. Kredit JP-OP_KBMI 3.6.-3.10.
