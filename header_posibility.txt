@@ -1,4 +1,13 @@
 keterangan
 kelompok bank / group of bank
 indikator / indicator
-Keterangan
+Keteranganindikator / indicator
+keterangan / items
+kelompok bank / group of bank
+lokasi / location
+lokasi
+sektor ekonomi
+jenis penggunaan
+pengelompokan bank
+keterangan
+Keterangan / Items
