@@ -11,3 +11,4 @@ jenis penggunaan
 pengelompokan bank
 keterangan
 Keterangan / Items
+Ket: Data tidak termasuk BUS
