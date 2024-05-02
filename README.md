@@ -11,7 +11,7 @@ Sheet yang di transformasikan :
 4. Kinerja_1.16.a.-1.20.a. -> Done
 5. Lap.L.R_KBMI1.6.-1.10. --> Done
 6. Kredit JP-OP_KBMI 3.6.-3.10. -> Done
-7. Kredit LU_KBMI 3.1-3.5.
+7. Kredit LU_KBMI 3.1-3.5. -> Done
 8. DPK per Lok_1.34.a.
 9. Komp.DPK_1.28.a.-1.32.a.
 10. SB DPK_1.35.a.-1.39.a.
