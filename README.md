@@ -16,6 +16,6 @@ Sheet yang di transformasikan :
 9. Komp.DPK_1.28.a.-1.32.a. -> Need Different Approach
 10. SB DPK_1.35.a.-1.39.a. -> Need Different Approach
 11. SB Kredit per LU_1.40.a. -> Done
-12. Komp.DPK_KBMI 1.28.-1.32.
+12. Komp.DPK_KBMI 1.28.-1.32. -> Need Different Approach
 
 Di Tranformasikan menjadi Hierarchical Model  
