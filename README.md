@@ -13,9 +13,9 @@ Sheet yang di transformasikan :
 6. Kredit JP-OP_KBMI 3.6.-3.10. -> Done
 7. Kredit LU_KBMI 3.1-3.5. -> Done
 8. DPK per Lok_1.34.a. -> Done
-9. Komp.DPK_1.28.a.-1.32.a. -> Done
-10. SB DPK_1.35.a.-1.39.a. -> Done
+9. Komp.DPK_1.28.a.-1.32.a. -> Done with Different App
+10. SB DPK_1.35.a.-1.39.a. -> Done with Different App
 11. SB Kredit per LU_1.40.a. -> Done
-12. Komp.DPK_KBMI 1.28.-1.32. -> Need Different Approach
+12. Komp.DPK_KBMI 1.28.-1.32. -> Done with Different App
 
 Di Tranformasikan menjadi Hierarchical Model  
